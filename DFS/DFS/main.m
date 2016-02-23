@@ -10,7 +10,7 @@
 #import "Digraph.h"
 
 Digraph * makeTestGraph(void);
-NSMutableArray * DFS(Digraph *graph, Node *start, Node *end, NSMutableArray *path);
+NSArray * DFS(Digraph *graph, Node *start, Node *end, NSMutableArray *pathr, NSArray *shortest);
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
@@ -22,23 +22,26 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-NSMutableArray * DFS(Digraph *graph, Node *start, Node *end, NSMutableArray *pathr){
+NSArray * DFS(Digraph *graph, Node *start, Node *end, NSMutableArray *pathr, NSArray *shortest){
     
     NSMutableArray *path = [NSMutableArray arrayWithArray:pathr];
     [path addObject:start];
+    
     NSLog(@"Current dfs path is %@", path);
     if([start isEqualTo:end]){
         return path;
     }
     for (Node *n in [graph childrenOfNode:start]){
         if (![path containsObject:n]){ // avoid cycles
-            NSMutableArray *newPath = DFS(graph, n, end, path);
-            if(newPath !=nil){
-                return newPath;
+            if(shortest==nil || [path count]< [shortest count]){
+                NSArray *newPath = DFS(graph, n, end, path, shortest);
+                if(newPath !=nil){
+                    shortest = newPath;
+                }
             }
         }
     }
-    return nil;
+    return shortest;
 }
 
 Digraph * makeTestGraph(void){
@@ -61,7 +64,8 @@ Digraph * makeTestGraph(void){
     [g addEdge:[[Edge alloc] initWithSource:myNodes[1] withDestination: myNodes[0]]];
     [g addEdge:[[Edge alloc] initWithSource:myNodes[3] withDestination: myNodes[1]]];
     [g addEdge:[[Edge alloc] initWithSource:myNodes[4] withDestination: myNodes[0]]];
-    DFS(g, myNodes[0], myNodes[5], [[NSMutableArray alloc] init]);
+    NSArray *shortestPath =  DFS(g, myNodes[0], myNodes[5], [[NSMutableArray alloc] init], nil); // in reality I would use a wrapper function to avoid unnecessary arguments
+    NSLog(@"shortest path: %@", shortestPath);
     return g;
     
 }
