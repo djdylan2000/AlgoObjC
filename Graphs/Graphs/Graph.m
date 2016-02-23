@@ -10,4 +10,10 @@
 
 @implementation Graph
 
+-(void) addEdge:(Edge *)edge{
+    [super addEdge:edge];
+    Edge *reversed = [[Edge alloc] initWithSource:edge.destination withDestination:edge.source];
+    [super addEdge:reversed];
+}
+
 @end

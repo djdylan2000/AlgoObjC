@@ -9,5 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface Node : NSObject
+@property (nonatomic, readonly) NSString *name;
+- (instancetype) initWithName:(NSString *) name;
 
 @end

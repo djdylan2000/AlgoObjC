@@ -9,5 +9,6 @@
 #import "Edge.h"
 
 @interface WeightedEdge : Edge
-
+@property (nonatomic, readonly) float weight;
+- (instancetype) initWithSource:(Node *)source withDestination:(Node *)destination withWeight:(float )weight;
 @end
